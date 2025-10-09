@@ -1,6 +1,5 @@
-// Esperamos a que el contenido de la página esté listo
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificamos si el navegador es compatible con la Web Speech API
+    // verificar compatibilidad con la Web Speech API
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
         alert("Tu navegador no soporta la Web Speech API. Por favor, intenta con Chrome o Edge.");
@@ -8,16 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'es-MX'; // Español de México
-    recognition.interimResults = true; // Muestra resultados parciales mientras hablas
-    recognition.continuous = true; // Sigue escuchando hasta que lo detengas
+    recognition.lang = 'es-MX'; 
+    recognition.interimResults = true; // mostrar resultados parciales mientras hablamos
+    recognition.continuous = true; 
 
     const startButton = document.getElementById('startButton');
     const partialText = document.getElementById('partialText');
     const resultDiv = document.getElementById('result');
     let finalTranscript = '';
 
-    // Evento que se dispara cuando el reconocimiento de voz empieza
+    // mostrar cuando se empieza a escuchar el microfono
     recognition.onstart = () => {
         startButton.textContent = '🛑 Escuchando...';
     };
@@ -25,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Evento que se dispara cuando detecta una palabra o frase
     recognition.onresult = (event) => {
         let interimTranscript = '';
-        finalTranscript = ''; // Limpiamos el texto final para reconstruirlo
+        finalTranscript = '';
 
         for (let i = 0; i < event.results.length; i++) {
             const transcript = event.results[i][0].transcript;
@@ -36,23 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Actualizamos el texto final en un nuevo párrafo
+        // Actualizar el texto final en un nuevo parrafo
         resultDiv.innerHTML = `<p class="final">${finalTranscript}</p>`;
-        // Y mostramos lo que se está detectando en tiempo real
         partialText.textContent = interimTranscript;
     };
 
-    // Evento que se dispara si hay un error
+    // mostrar errores
     recognition.onerror = (event) => {
         console.error('Error en el reconocimiento de voz:', event.error);
     };
 
-    // Evento que se dispara cuando termina de escuchar
+    // mostrar que se termino de escuchar
     recognition.onend = () => {
         startButton.textContent = '🎤 Empezar a Escuchar';
     };
 
-    // Lógica del botón para empezar a escuchar
+    // logica del boton para empezar a escuchar
     startButton.addEventListener('click', () => {
         recognition.start();
     });
